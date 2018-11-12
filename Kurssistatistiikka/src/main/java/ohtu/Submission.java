@@ -6,7 +6,7 @@ public class Submission {
     private int week, hours, numberOfExercises;
     private String course, fullName;
     private List<Integer> exercises;
-
+    
     public void setWeek(int week) {
         this.week = week;
     }
@@ -62,7 +62,7 @@ public class Submission {
     @Override
     public String toString() {
         return "viikko " + week + ":\n  tehtyjä tehtäviä " + exercises.size() + "/" + getNumberOfExercisesAvailable() +
-                " aikaa kului " + hours + " tehdyt tehtävät: " + exercises.toString() + "\n";
+                " aikaa kului " + hours + " tehdyt tehtävät: " + exercises.toString().replace("[", "").replace("]", "") + "\n";
     }
     
 }

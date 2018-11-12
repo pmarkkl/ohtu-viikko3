@@ -6,10 +6,16 @@ import java.util.List;
 
 public class Course {
     
-    private int year;
+    private int year, hourTotal, exerciseTotal, studentTotal;
     private String name, term, fullName;
     private List<Integer> exercises;
     private List<Submission> submissions;
+    
+    public Course() {
+        this.hourTotal = 0;
+        this.exerciseTotal = 0;
+        this.studentTotal = 0;
+    }
     
     public int getYear() {
         return year;
@@ -57,12 +63,25 @@ public class Course {
         return hours;
     }
     
+    public void setHoursTotal(int hoursTotal) {
+        this.hourTotal = hoursTotal;
+    }
+    
+    public void setExerciseTotal(int exerciseTotal) {
+        this.exerciseTotal = exerciseTotal;
+    }
+    
+    public void setStudentsTotal(int studentTotal) {
+        this.studentTotal = studentTotal;
+    }
     
     private int getExercisesDone() {
         int execs = 0;
         execs = submissions.stream().map((submission) -> submission.getNumberOfExercises()).reduce(execs, Integer::sum);
         return execs;
     }
+    
+    
     
     private String stringBuilder(List<Submission> submissions) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -75,6 +94,6 @@ public class Course {
     @Override
     public String toString() {
         return fullName + " " + term + " " + year + " \n\n" + stringBuilder(submissions) + "\nyhteensä " + getExercisesDone() + "/" + exercises.stream().mapToInt(Integer::intValue).sum() + 
-                " tehtävää " + getHours() + " tuntia\n";
+                " tehtävää " + getHours() + " tuntia\n\nkurssilla yhteensä " + studentTotal + " palautusta, palautettuja tehtäviä " + exerciseTotal + " kpl, aikaa käytetty yhteensä " + hourTotal + " tuntia\n";
     }
 }
