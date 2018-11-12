@@ -11,7 +11,6 @@ public class Main {
     public static void main(String[] args) throws IOException {
         // ÄLÄ laita githubiin omaa opiskelijanumeroasi
         String studentNr = "012345678";
-        Student student = new Student();
         if ( args.length>0) {
             studentNr = args[0];
         }
