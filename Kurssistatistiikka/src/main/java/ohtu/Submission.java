@@ -3,8 +3,8 @@ package ohtu;
 import java.util.List;
 
 public class Submission {
-    private int week, hours;
-    private String course;
+    private int week, hours, numberOfExercises;
+    private String course, fullName;
     private List<Integer> exercises;
 
     public void setWeek(int week) {
@@ -31,6 +31,18 @@ public class Submission {
         return course;
     }
     
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+    
+    public String getFullName() {
+        return fullName;
+    }
+    
+    public void setNumberOfExercises(int numberOfExercises) {
+        this.numberOfExercises = numberOfExercises;
+    }
+    
     public void setExercises(List exercises) {
         this.exercises = exercises;
     }
@@ -42,11 +54,15 @@ public class Submission {
     public int getNumberOfExercises() {
         return exercises.size();
     }
+    
+    private int getNumberOfExercisesAvailable() {
+        return numberOfExercises;
+    }
 
     @Override
     public String toString() {
-        return "  " + course + ", viikko " + week + " tehtyjä tehtäviä yhteensä " + exercises.size() + 
-                " aikaa kului " + hours + " tehdyt tehtävät: " + exercises.toString();
+        return "viikko " + week + ":\n  tehtyjä tehtäviä " + exercises.size() + "/" + getNumberOfExercisesAvailable() +
+                " aikaa kului " + hours + " tehdyt tehtävät: " + exercises.toString() + "\n";
     }
     
 }

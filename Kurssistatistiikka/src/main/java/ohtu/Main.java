@@ -2,6 +2,8 @@ package ohtu;
 
 import com.google.gson.Gson;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import org.apache.http.client.fluent.Request;
 
 public class Main {
@@ -9,25 +11,40 @@ public class Main {
     public static void main(String[] args) throws IOException {
         // ÄLÄ laita githubiin omaa opiskelijanumeroasi
         String studentNr = "012345678";
+        Student student = new Student();
         if ( args.length>0) {
             studentNr = args[0];
         }
 
-        String url = "https://studies.cs.helsinki.fi/courses/students/"+studentNr+"/submissions";
+        String studentUrl = "https://studies.cs.helsinki.fi/courses/students/"+studentNr+"/submissions";
+        String coursesUrl = "https://studies.cs.helsinki.fi/courses/courseinfo";
 
-        String bodyText = Request.Get(url).execute().returnContent().asString();
-
-        Gson mapper = new Gson();
-        Submission[] subs = mapper.fromJson(bodyText, Submission[].class);
+        String bodyText = Request.Get(studentUrl).execute().returnContent().asString();
+        String coursesText = Request.Get(coursesUrl).execute().returnContent().asString();
         
-        int exercises = 0;
-        int hours = 0;
-        System.out.println("opiskelijanumero " + studentNr + "\n");
-        for (Submission submission : subs) {
-            hours += submission.getHours();
-            exercises += submission.getNumberOfExercises();
-            System.out.println(submission);
+        Gson studentMapper = new Gson();
+        Submission[] subs = studentMapper.fromJson(bodyText, Submission[].class);
+        
+        Gson coursesMapper = new Gson();
+        Course[] courses = coursesMapper.fromJson(coursesText, Course[].class);
+        
+        for (Course course : courses) {
+            List<Integer> numberOf = course.getExercises();
+            for (Submission submission : subs) {
+                if (course.getName().equals(submission.getCourse())) {
+                    course.addSubmission(submission);
+                    submission.setNumberOfExercises(numberOf.get(submission.getWeek()));
+                }
+            }
         }
-        System.out.println("\nyhteensä: " + exercises + " tehtävää " + hours + " tuntia");
+        
+        System.out.println("opiskelijanumero " + studentNr + "\n");
+        
+        for (Course course : courses) {
+            if (course.getNumberOfSubmissions() > 0) {
+                System.out.println(course);
+            }
+        }
+        
     }
 }
