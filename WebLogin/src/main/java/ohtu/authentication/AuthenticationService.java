@@ -29,11 +29,19 @@ public class AuthenticationService {
         if (userDao.findByName(username) != null) {
             status.addError("username is already taken");
         }
-
-        if (username.length()<3 ) {
-            status.addError("username should have at least 3 characters");
+        
+        if (!username.matches("^[a-z]{3,}$")) {
+            status.addError("username should have at least 3 characters and only characters between a-z are allowed.");
         }
-
+        
+        if (!password.equals(passwordConfirmation)) {
+            status.addError("password and password confirmation do not match");
+        }
+        
+        if (!password.matches("^(?=.*[\\d$@.$!%*#?&]).{8,}$")) {
+            status.addError("password should have at least 8 characters, and contain at least one number or special character.");
+        }
+        
         if (status.isOk()) {
             userDao.add(new User(username, password));
         }
